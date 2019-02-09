@@ -1,0 +1,70 @@
+<!--  rails07-->
+<div class="topic-index-wrapper">
+  <div class="container">
+    <% @topics.each do |topic| %>
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="topic-index-single">
+
+          <h2 class="topic-author">
+            <%= topic.user.name %>
+          </h2>
+
+          <%= image_tag topic.image.url %>
+
+          <% if !topic.favorite_users.include?(current_user) %>
+           <%= link_to favorites_path(topic_id: topic.id), method: :post do %>
+            <%= image_tag 'icons/heart-black.png', class: 'topic-index-icon' %>
+           <% end %>
+          <% else %>
+
+          <% end %>
+
+          <%= link_to new_comment_path(topic_id: topic.id), method: :get do %>
+            <%= image_tag "icons/comment.png",class: "topic-index-icon"%>
+          <% end %>
+
+          <p class="topic-text">
+            <%= topic.description %>
+          </p>
+
+          <h2　class="topic-commment">コメント</h2>
+
+          <% topic.comments.each do |content| %>
+           <p>
+             <%= content.content %>
+           </p>
+        <% end %>
+
+<%#  以下の方は間違いで上記の方が正解
+　　　理由：topics-controllerの６行目で最初はcomment（モデル）にtopics（モデル）を繋げようとしていた。しかしこれはすでにhas_many
+          の操作をしているので必要ない。
+          よって@comment_topicsも必然的に使わないことになる。
+           topic.comments.each do |comment|
+           のtopicは
+            @topics.each do |topic|
+            の|topic|のtopicのこと
+            %>
+
+          <%# <% @comment_topics.each do |content| %>
+           <p>
+             <%# <%= comment.content %> %>
+           </p>
+          <%# <% end %> %> %>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>
+<%# favorite_users→テーブル
+
+    12行目からの意味
+    if :true（=いいねされてない）→表示, false（=いいねしている）→非表示
+
+    いいねしたtopicですか？
+    はい；非表示
+     → ！があるのでtrueがfalseになり if のなかで　else　が適用される
+    いいえ :表示
+     →！によりいいねしたトピックではない（＝false）がtrueになる。
+%>
