@@ -23,13 +23,12 @@ Rails.application.routes.draw do
 
   get 'favorites/index', to: "favorites#index"
   post '/favorites', to: 'favorites#create'
+  delete '/favorites', to: 'favorites#destroy'
 
-  resources :favorites do
-    resources :favorites, only: [:create, :destroy]
-  end
 
   get 'comments/index'
   post '/comments', to: 'comments#create'
 
   resources :comments
+
 end
